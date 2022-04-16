@@ -1,0 +1,33 @@
+sudo curl -X GET 127.0.0.1:9200/graylog_0/_search?pretty -H 'Content-Type:application/json' -o logs -d'
+{
+"query":{
+"match":{
+"message":"ET SCAN Suspicious inbound"
+}
+}
+}
+'
+sudo curl -X GET 127.0.0.1:9200/graylog_0/_search?pretty -H 'Content-Type:application/json' -o logs -d'
+{
+    "size":10000,
+    "query" : {
+    "bool": {
+      "must": [
+        {
+          "match_phrase": {
+            "message": "ET SCAN Suspicious inbound"
+          }
+        },
+        {
+          "range" : {
+            "timestamp": {
+              "gt": "2022-04-15 00:00:00.000"
+            }
+          }
+        }
+      ]
+    }
+  }
+}'
+
+https://www.baeldung.com/elasticsearch-java
