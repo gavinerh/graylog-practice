@@ -31,3 +31,4 @@ sudo curl -X GET 127.0.0.1:9200/graylog_0/_search?pretty -H 'Content-Type:applic
 }'
 
 https://www.baeldung.com/elasticsearch-java
+https://github.com/eugenp/tutorials/tree/master/persistence-modules/spring-data-elasticsearch
