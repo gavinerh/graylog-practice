@@ -5,7 +5,7 @@ import requests
 
 def search(uri):
     query = json.dumps({
-        "size":100,
+        "size":10000,
         "query" : {
             "bool": {
                 "must": [
@@ -17,7 +17,8 @@ def search(uri):
                     {
                         "range" : {
                             "timestamp": {
-                                "gt": "2022-04-15 00:00:00.000"
+                                "gt": "2022-03-28 00:00:00.000",
+                                "lt": "2022-04-18 00:00:00.000"
                             }
                         }
                     }
@@ -30,6 +31,30 @@ def search(uri):
     results = json.loads(response.text)
     return results
 
+def exportToCSV(res, title):
+    with open('C:\\Users\\gavin\\OneDrive\\Desktop\\logFile\\logs.csv', 'w') as f:
+        f.write(title)
+        f.write('\n')
+        for s in res:
+            f.write(s)
+            f.write('\n')
+        f.close()
+    return
+
+def createCSVString(response):
+    index = 0;
+    while index < len(response):
+        timestamp = response[index]['_source']['timestamp']
+        message = response[index]['_source']['message'].replace('] ', ',')
+        response[index] = message.replace('-> ', ',')
+        response[index] += ','
+        response[index] += timestamp
+        index+=1
+    return response
+
 url = "http://localhost:9200/graylog_0/_search"
 response = search(url)
-print(response['hits']["hits"][0])
+response = createCSVString(response['hits']['hits'])
+# print(response[0])
+title = "\"Source\",\"Message\",\"Priority\",\"Source IP\",\"Destination IP\",\"Timestamp\""
+exportToCSV(response[:-10], title)
