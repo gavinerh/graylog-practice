@@ -45,6 +45,8 @@ services:
       - GRAYLOG_TRANSPORT_EMAIL_AUTH_USERNAME=ti14000@ethz.ch
       - GRAYLOG_TRANSPORT_EMAIL_AUTH_PASSWORD=99YFLNf9w=-T
       - GRAYLOG_TRANSPORT_EMAIL_FROM_EMAIL=ti14000@ethz.ch
+      - GRAYLOG_ROOT_TIMEZONE=Asia/Singapore
+      - TZ=Asia/Singapore
 
     entrypoint: /usr/bin/tini -- wait-for-it elasticsearch:9200 --  /docker-entrypoint.sh
     links:
