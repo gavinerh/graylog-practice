@@ -45,5 +45,28 @@ web console
 
 # How to use the project
 
+# List of services running
+1. Graylog server
+    * HTTP and email alerts and notification of brute force attacks
+    * UDP stream input listener
+2. Elasticsearch
+    * Store log messages
+4. Mongodb
+    * Store graylog user specific server
+5. Python flask server
+    * Receive http notification from graylog alerts of brute force attack
+    * Classify logs depending on set time range
+    * Capture event_definition_description values from HTTP notification of graylog and query elasticsearch for the past 15 minutes for new brute force entries, followed by populating the brute force logs file
+6. Java backend server
+    * provide rest endpoints to
+        * list all classifications within a set time range, http calls to python flask server
+        * list of all brute force attacks with timestamp
+        * trigger logs classifications (http calls to python server)
+7. React web console
+    * Another web-interface on top of the graylog server to provide most information to user
+    * Frontend interface for java backend server
+8. Nginx reverse proxy
+    * For routing react http calls to java backend server
+
 # Using ssh port forwarding
 
