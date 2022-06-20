@@ -14,7 +14,7 @@ service tag for appropriate email configuration and GRAYLOG_ROOT_PASSWORD in SHA
     * Host machine storage location for bind mounts under the `volumes` tag
     * `ports` information under the `graylog` service tag for the appropriate udp socket number to be exposed
 2. At the root of the project directory, run `sudo docker-compose up`
-3. At the root of the project directory, also run `sudo python3 main.py &` to start the udp broadcast service. 
+3. At the root of the project directory, also run `./startBroadcast` to start the udp broadcast service. 
 Information regarding the broadcast information is located in the ports.conf configuration file.
 4. Check if the containers are running, type `sudo docker ps` to confirm
 5. Once the containers are running, use ssh port forwarding to access web interface of graylog: 
