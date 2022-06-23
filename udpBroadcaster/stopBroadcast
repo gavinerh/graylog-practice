@@ -1,0 +1,5 @@
+#!/bin/bash
+
+pid=`cat src/pid`
+sudo kill $pid
+echo Process stopped
