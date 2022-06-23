@@ -17,10 +17,11 @@ service tag for appropriate email configuration and GRAYLOG_ROOT_PASSWORD in SHA
     * Host machine storage location for bind mounts under the `volumes` tag
     * `ports` information under the `graylog` service tag for the appropriate udp socket number to be exposed
 2. At the root of the project directory, run `sudo docker-compose up`
-3. At the root of the project directory, also run `./startBroadcast` to start the udp broadcast service. 
+3. `cd udpBroadcaster` to enter the directory udpBroadcaster
+4. Type `./startBroadcast` to start the udp broadcast service. 
 Information regarding the broadcast information is located in the ports.conf configuration file.
 4. Check if the containers are running, type `sudo docker ps` to confirm
-5. Once the containers are running, use ssh port forwarding to access web interface of graylog: 
+5. Once the containers are running, use ssh port forwarding to access web interface of graylog at port 9000: 
 6. Visit the graylog service from local browser, and login with `admin` as user and with the
 same password as the one used in the docker-compose.yml file
 7. After login, start the udp input stream at the same port number as specified in the docker-compose.yml file
@@ -37,14 +38,14 @@ see image: ![image](https://user-images.githubusercontent.com/75064420/174514501
         * Enter the search query that graylog should trigger an event when such a message is detected
         * At the notifications tab, add new notification that was created in the previous step and click done
         * Click the summary tab and click done
-10. Use ssh port forwarding again, but now on another port number to view the custom frontend
-web console
+10. Use ssh port forwarding again, but now using the nginx port number to view the custom frontend
+web console at port 10000
     * The custom web-console will portray information or allow custom actions such as:
         * view the list of brute force attacks
         * view the current file classifications 
 # How to stop the project
 1. Go to the root directory and type `sudo docker-compose down`
-2. Also at the root directory, type `./stopBroadcast` to stop udp broadcast
+2. `cd udpBroadcaster` to enter udpBroadcaster folder, type `./stopBroadcast` to stop udp broadcasting service
 
 # How to use the project
 
