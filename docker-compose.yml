@@ -1,0 +1,114 @@
+version: '2'
+services:
+  # MongoDB: https://hub.docker.com/_/mongo/
+  nginx:
+    image: gavinerh/nginx-1
+    restart: always
+    ports:
+      - 10000:10000
+  frontend:
+    image: gavinerh/react-test
+  java-server:
+    image: gavinerh/backend-java-7
+  mongodb:
+    image: mongo:4.2
+    volumes:
+      - mongo-data:/data/db
+   # Elasticsearch: https://www.elastic.co/guide/en/elasticsearch/reference/7.10/docker.html
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch-oss:7.10.2
+    volumes:
+      - elasticsearch-data:/usr/share/elasticsearch/data
+    environment:
+      - http.host=0.0.0.0
+      - transport.host=localhost
+      - network.host=0.0.0.0
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ports:
+      - 9200:9200
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    mem_limit: 1.5g
+  # Graylog: https://hub.docker.com/r/graylog/graylog/
+  graylog:
+    image: graylog/graylog:4.2
+    volumes:
+      - graylog-data:/usr/share/graylog/data
+    environment:
+      # CHANGE ME (must be at least 16 characters)!
+      - GRAYLOG_PASSWORD_SECRET=somepasswordpepper
+      # Password: admin
+      - GRAYLOG_ROOT_PASSWORD_SHA2=8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918
+      - GRAYLOG_HTTP_EXTERNAL_URI=http://198.168.1.90.34:9000/
+      - GRAYLOG_WEB_ENDPOINT_URI=http://127.0.0.1:9000/api
+      - GRAYLOG_TRANSPORT_EMAIL_WEB_INTERFACE_URL=http://192.168.90.34:9000
+      - GRAYLOG_TRANSPORT_EMAIL_HOSTNAME=mail.ethz.ch
+      - GRAYLOG_TRANSPORT_EMAIL_ENABLED=true
+      - GRAYLOG_TRANSPORT_EMAIL_PORT=587
+      - GRAYLOG_TRANSPORT_EMAIL_USE_AUTH=true
+      - GRAYLOG_TRANSPORT_EMAIL_USE_TLS=true
+      - GRAYLOG_TRANSPORT_EMAIL_USE_SSL=false
+      - GRAYLOG_TRANSPORT_EMAIL_SUBJECT_PREFIX=[graylog]
+      - GRAYLOG_TRANSPORT_EMAIL_AUTH_USERNAME=ti14000@ethz.ch
+      - GRAYLOG_TRANSPORT_EMAIL_AUTH_PASSWORD=99YFLNf9w=-T
+      - GRAYLOG_TRANSPORT_EMAIL_FROM_EMAIL=ti14000@ethz.ch
+      - GRAYLOG_ROOT_TIMEZONE=Asia/Singapore
+      - TZ=Asia/Singapore
+
+    entrypoint: /usr/bin/tini -- wait-for-it elasticsearch:9200 --  /docker-entrypoint.sh
+    links:
+        - mongodb:mongo
+        - elasticsearch
+    restart: always
+    depends_on:
+      - mongodb
+      - elasticsearch
+    ports:
+      # Graylog web interface and REST API
+      - 9000:9000
+      # Syslog TCP
+      - 1514:1514
+      # Syslog UDP
+      - 1514:1514/udp
+      - 15000:15000/udp
+      - 15001:15001/udp
+      - 15002:15002/udp
+      - 20000:20000/udp
+      # GELF TCP
+      - 12201:12201
+      # GELF UDP
+      - 12201:12201/udp
+  python-server:
+    image: gavinerh/flask-test-server-5
+    ports:
+      - 5000:5000
+    volumes:
+      - myapp:/appData/
+# Volumes for persisting data, see https://docs.docker.com/engine/admin/volumes/volumes/
+volumes:
+  mongo-data:
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: './data/mongodb-data'
+  elasticsearch-data:
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: './data/elasticsearch-data2'
+  graylog-data:
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: './data/graylog-data'
+  myapp:
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: './data/python-data'
