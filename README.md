@@ -1,5 +1,9 @@
 # Logging Server
 
+## Overall architecture diagram
+![FHT internship architecture](https://user-images.githubusercontent.com/75064420/175186953-22152ce5-4a9f-4e70-bf63-ec3a381e22f2.jpg)
+
+
 ## Project Description
 This project main function is to act as a logging server, specifically to receive log messages via 
 udp transfer protocol. The core technology uses a graylog server, which is an open-source project 
