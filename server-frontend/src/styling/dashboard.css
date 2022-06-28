@@ -1,0 +1,7 @@
+.nav-bar{
+    margin: 0;
+    padding: 10px;
+    color: rgb(248, 185, 160);
+    background-color: black;
+    z-index: 2;
+}

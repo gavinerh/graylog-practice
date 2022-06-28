@@ -48,6 +48,7 @@ public class ClassificationController {
 	public ResponseEntity<ResponseModel> triggerReclassification(@RequestParam("timeMin") String timeMin,
 			@RequestParam("timeMax") String timeMax) throws IOException, URISyntaxException, InterruptedException {
 		// create a request to python server
+		timeRange.clear();
 		timeRange.add(timeMin); timeRange.add(timeMax);
 		String timeRangeFilePath = env.getProperty("timerange.file");
 		manageFiles.clearFileContents(timeRangeFilePath);

@@ -1,7 +1,7 @@
 import axios from "axios";
 
 class ClassifyLogsService{
-    url = "http://localhost:8081"
+    url = "http://localhost:10000/javaClassify"
     classifyLogs(timeMin, timeMax){
         console.log("timeMin: " + timeMin);
         console.log("timeMax: " + timeMax);

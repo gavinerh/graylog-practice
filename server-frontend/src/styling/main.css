@@ -1,0 +1,60 @@
+body{
+    position: relative;
+    margin: 0;
+
+}
+
+.leftnav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 200px;
+    height: 100%;
+    background-color: red;
+}
+
+.main-container{
+    position: relative;
+    width: 70%;
+    height: 100%;
+    padding: 10px;
+    top: 30px;
+    left: 80px;
+    margin: 10px auto;
+    text-align: center;
+    border: 1px solid gray;
+    z-index: 3;
+    /* background-color: gray; */
+}
+
+.date-picker{
+    text-align: center;
+    /* background-color: aquamarine; */
+    padding: 20px;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.column-spacing{
+    width: 30px;
+}
+
+.button-submit{
+    background-color: rgb(16, 16, 16);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    box-shadow: 2px 2px gray;
+    cursor: pointer;
+}
+
+.date-input{
+    background-color: rgb(240, 236, 236);
+    padding: 5px;
+    border-radius: 10px;
+    border: 0.5px solid gray;
+}
+
+.form-element{
+
+}
