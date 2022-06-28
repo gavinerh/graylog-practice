@@ -8,6 +8,8 @@ function ClassifyLogs() {
         timeMin: "",
         timeMax: ""
     })
+
+    // the dependency array must stay empty so the rendering only happen once
     useEffect(()=>{
         ClassifyLogsService.getLogs()
         .then(response => {
