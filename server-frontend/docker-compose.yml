@@ -1,0 +1,21 @@
+version: '2'
+services:
+  nginx:
+    restart: always
+    image: gavinerh/nginx3
+    ports:
+      - '3050:80'
+  backend:
+    image: gavinerh/test-java
+    # networks:
+    #   - network-100
+  frontend:
+    image: gavinerh/react-test
+    ports:
+      - '3000:3000'
+#     networks:
+#       - network-100
+# networks:
+#   network-100:
+    
+  
