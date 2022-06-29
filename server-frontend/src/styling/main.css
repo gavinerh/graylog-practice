@@ -4,23 +4,15 @@ body{
 
 }
 
-.leftnav {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 200px;
-    height: 100%;
-    background-color: red;
-}
 
 .main-container{
     position: relative;
     width: 70%;
     height: 100%;
     padding: 10px;
-    top: 30px;
+    top: 70px;
     left: 80px;
-    margin: 10px auto;
+    margin: 0px auto;
     text-align: center;
     border: 1px solid gray;
     z-index: 3;
@@ -28,6 +20,7 @@ body{
 }
 
 .date-picker{
+    /* position: fixed; */
     text-align: center;
     /* background-color: aquamarine; */
     padding: 20px;
@@ -55,6 +48,28 @@ body{
     border: 0.5px solid gray;
 }
 
-.form-element{
+.table-border-visible{
+    border: 1px solid black;
+}
 
+.col-span-2{
+    /* column-span: "2"; */
+    color: red;
+}
+
+.logs-container{
+    border: 1px solid gray;
+    overflow-y: scroll;
+    height: 500px;
+    border-radius: 5px;
+    scrollbar-width: none;
+    box-shadow: 1px 1px gray;
+    text-align: left;
+}
+
+
+
+.log-message{
+    border-bottom: 0.5px solid gray;
+    padding: 0px 20px;
 }

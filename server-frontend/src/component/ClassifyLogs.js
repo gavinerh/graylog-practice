@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react"
 import ClassifyLogsService from "../service/ClassifyLogsService"
 import '../styling/main.css';
+import TimeRangeSetting from "./TimeRangeSetting";
+import Logs from "./Logs";
 
 function ClassifyLogs() {
     const [logArr, setLogArr] = useState([]);
@@ -8,14 +10,21 @@ function ClassifyLogs() {
         timeMin: "",
         timeMax: ""
     })
+    const [returnedDateRange, setReturnedRange] = useState({
+        dateMin: "",
+        dateMax: ""
+    })
 
     // the dependency array must stay empty so the rendering only happen once
-    useEffect(()=>{
+    useEffect(() => {
         ClassifyLogsService.getLogs()
-        .then(response => {
-            setLogArr(response.data.results)
-            console.log(response.data.results);
-        })
+            .then(response => {
+                setLogArr(response.data.results)
+                setReturnedRange({
+                    dateMin: response.data.timeMin,
+                    dateMax: response.data.timeMax
+                })
+            })
     }, []);
 
 
@@ -34,10 +43,18 @@ function ClassifyLogs() {
     }
 
     const submitHandler = (event) => {
+        console.log("submitHandler is called");
         event.preventDefault();
         ClassifyLogsService.classifyLogs(dateRange.timeMin, dateRange.timeMax)
             .then(response => {
-                console.log(response);
+                ClassifyLogsService.getLogs()
+                    .then(response => {
+                        setReturnedRange({
+                            dateMin: response.data.timeMin,
+                            dateMax: response.data.timeMax
+                        })
+                        setLogArr(response.data.results);
+                    })
             }).catch(error => {
                 console.log(error);
             })
@@ -50,9 +67,11 @@ function ClassifyLogs() {
             <form>
                 <table className="date-picker">
                     <tr>
-                        <td><label for="timeMin">Min Date:</label></td>
+                        <td>Min Date: </td>
                         <td className="column-spacing"></td>
-                        <td><label for="timeMax">Max Date:</label></td>
+                        <td>Max Date:</td>
+                        <td></td>
+                        <td></td>
                     </tr>
                     <tr>
                         <td><input className="date-input" id="timeMin" type="date" onInput={minDateChangeHandler} value={dateRange.timeMin} /></td>
@@ -62,11 +81,11 @@ function ClassifyLogs() {
                         <td><button type="submit" onClick={submitHandler} className="button-submit">Submit</button></td>
                     </tr>
                 </table>
-                <i class="fa-solid fa-house-chimney"></i>
             </form>
             <hr />
             <div>
-                {/* <Logs /> */}
+                <TimeRangeSetting returnedDateRange={returnedDateRange} />
+                <Logs logs={logArr} />
             </div>
         </div>
 

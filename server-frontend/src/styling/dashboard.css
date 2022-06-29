@@ -1,7 +1,11 @@
 .nav-bar{
+    position: fixed;
     margin: 0;
     padding: 10px;
     color: rgb(248, 185, 160);
     background-color: black;
-    z-index: 2;
+    width: 100%;
+    z-index: 4;
+    height: 30px;
+    top: 0;
 }
