@@ -3,8 +3,7 @@ import axios from "axios";
 class ClassifyLogsService{
     url = "http://localhost:10000/javaClassify"
     classifyLogs(timeMin, timeMax){
-        console.log("timeMin: " + timeMin);
-        console.log("timeMax: " + timeMax);
+        console.log("inside classifiyLogsService");
         return axios.get(`${this.url}/reclassify`, {params: {
             timeMin,
             timeMax

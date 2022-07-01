@@ -15,6 +15,8 @@ function ClassifyLogs() {
         dateMax: ""
     })
 
+    const [dateError, setDateError] = useState("");
+
     // the dependency array must stay empty so the rendering only happen once
     useEffect(() => {
         ClassifyLogsService.getLogs()
@@ -43,8 +45,18 @@ function ClassifyLogs() {
     }
 
     const submitHandler = (event) => {
-        console.log("submitHandler is called");
         event.preventDefault();
+        setDateError("");
+        if (new Date(dateRange.timeMax) <= new Date(dateRange.timeMin)){
+            setDateError("Upper time limit is less than or similar to lower time limit");
+            return;
+        }
+        let now = new Date().toDateString().split("T")[0];
+        let nowDate = new Date(now);
+        if (new Date(dateRange.timeMin) >= nowDate){
+            setDateError("Time range selected is out of range");
+            return;
+        }
         ClassifyLogsService.classifyLogs(dateRange.timeMin, dateRange.timeMax)
             .then(response => {
                 ClassifyLogsService.getLogs()
@@ -54,6 +66,10 @@ function ClassifyLogs() {
                             dateMax: response.data.timeMax
                         })
                         setLogArr(response.data.results);
+                        setDateRange({
+                            timeMax: "",
+                            timeMin: ""
+                        })
                     })
             }).catch(error => {
                 console.log(error);
@@ -82,6 +98,11 @@ function ClassifyLogs() {
                     </tr>
                 </table>
             </form>
+            {dateError ? 
+                <div>
+                    {dateError}
+                </div>
+                : <div></div>}
             <hr />
             <div>
                 <TimeRangeSetting returnedDateRange={returnedDateRange} />
