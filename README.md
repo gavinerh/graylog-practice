@@ -16,21 +16,41 @@ is preferably running linux.
 service tag for appropriate email configuration and GRAYLOG_ROOT_PASSWORD in SHA hash format
     * Host machine storage location for bind mounts under the `volumes` tag
     * `ports` information under the `graylog` service tag for the appropriate udp socket number to be exposed
-2. At the root of the project directory, run `sudo docker-compose up`
-3. `cd udpBroadcaster` to enter the directory udpBroadcaster
-4. Type `./startBroadcast` to start the udp broadcast service. 
-Information regarding the broadcast information is located in the ports.conf configuration file.
-4. Check if the containers are running, type `sudo docker ps` to confirm
-5. Once the containers are running, use ssh port forwarding to access web interface of graylog at port 9000: 
-6. Visit the graylog service from local browser, and login with `admin` as user and with the
+2. Create the containers by building the containers for the services:
+    * Build python server
+        * `cd flask-server`
+        * `sudo docker build -t gavinerh/flask-test-server-6 .`
+    * Pull the java-classification-server from remote docker hub
+        * `sudo docker pull gavinerh/java-classification-server`
+    * (Optional) Build java classification server from source code directly:
+        * First: Install maven
+        * Second: Check maven is installed
+        * Continue to build the container
+            * From the root of the project: `cd classification-server`
+            * `sudo mvn clean install -DskipTests`
+            * `sudo docker build -t gavinerh/java-classification-server .`
+    * Build the react frontend server:
+        * First: Install npm and node
+        * Second: Check npm and node version
+        * Continue to build the container:
+            * From the root of the project: `cd server-frontend`
+            * `sudo npm install`
+            * `sudo docker build -t gavinerh/react-test .`
+3. At the root of the project directory, run `sudo docker-compose up`
+4. `cd udpBroadcaster` to enter the directory udpBroadcaster
+5. Type `./startBroadcast` to start the udp broadcast service. 
+information regarding the broadcast information is located in the ports.conf configuration file.
+6. Check if the containers are running, type `sudo docker ps` to confirm
+7. Once the containers are running, use ssh port forwarding to access web interface of graylog at port 9000: 
+8. Visit the graylog service from local browser, and login with `admin` as user and with the
 same password as the one used in the docker-compose.yml file
-7. After login, start the udp input stream at the same port number as specified in the docker-compose.yml file
+9. After login, start the udp input stream at the same port number as specified in the docker-compose.yml file
 see image: ![image](https://user-images.githubusercontent.com/75064420/174514501-6f905e32-6f00-4ac6-ab0b-e60cf9b09c92.png)
-8. Set up input stream:
+10. Set up input stream:
     * Create new input stream under System -> Inputs
     * Select new input stream type see image: ![image](https://user-images.githubusercontent.com/75064420/174514947-53904f1b-942f-4f6a-8351-7e3250534e02.png)
     * Use the default settings but change the input port number: ![image](https://user-images.githubusercontent.com/75064420/174515211-9c0c3a8f-e30e-49c6-b8bb-55d9365bf92d.png)
-9. Set up alerts under the alerts tab
+11. Set up alerts under the alerts tab
     * Create new notifications:
         * Select from the list of notifications dropdown and enter the appropriate information
     * Create new event definition
@@ -38,7 +58,7 @@ see image: ![image](https://user-images.githubusercontent.com/75064420/174514501
         * Enter the search query that graylog should trigger an event when such a message is detected
         * At the notifications tab, add new notification that was created in the previous step and click done
         * Click the summary tab and click done
-10. Use ssh port forwarding again, but now using the nginx port number to view the custom frontend
+12. Use ssh port forwarding again, but now using the nginx port number to view the custom frontend
 web console at port 10000
     * The custom web-console will portray information or allow custom actions such as:
         * view the list of brute force attacks
