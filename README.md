@@ -1,7 +1,8 @@
 # Logging Server
 
 ## Overall architecture diagram
-![FHT internship architecture](https://user-images.githubusercontent.com/75064420/175258102-76487525-17ce-4718-8a4c-f0c65dc71e3b.jpg)
+![FHT internship architecture](https://user-images.githubusercontent.com/75064420/177126500-411c23c5-f745-4bd0-921d-0c17fccdfca9.jpg)
+
 
 ## Project Description
 This project main function is to act as a logging server, specifically to receive log messages via 
