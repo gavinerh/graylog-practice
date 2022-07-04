@@ -3,6 +3,6 @@ import '../styling/dashboard.css';
 
 export const NavigationBar = () => (
     <nav>
-        <h1 className='nav-bar'>Dashboard</h1>
+        <h1 className='nav-bar'>Logger Assistant</h1>
     </nav>
 )

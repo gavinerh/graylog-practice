@@ -16,6 +16,10 @@ class DashboardService{
         return axios.get(`${this.url}/`);
     }
 
+    deleteItem(id){
+        return axios.delete(`${this.url}/${id}`)
+    }
+
 }
 
 export default new DashboardService();

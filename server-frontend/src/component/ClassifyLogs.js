@@ -47,13 +47,13 @@ function ClassifyLogs() {
     const submitHandler = (event) => {
         event.preventDefault();
         setDateError("");
-        if (new Date(dateRange.timeMax) <= new Date(dateRange.timeMin)){
+        if (new Date(dateRange.timeMax) <= new Date(dateRange.timeMin)) {
             setDateError("Upper time limit is less than or similar to lower time limit");
             return;
         }
         let now = new Date().toDateString().split("T")[0];
         let nowDate = new Date(now);
-        if (new Date(dateRange.timeMin) >= nowDate){
+        if (new Date(dateRange.timeMin) >= nowDate) {
             setDateError("Time range selected is out of range");
             return;
         }
@@ -79,34 +79,37 @@ function ClassifyLogs() {
 
 
     return (
-        <div className="main-container">
-            <form>
-                <table className="date-picker">
-                    <tr>
-                        <td>Min Date: </td>
-                        <td className="column-spacing"></td>
-                        <td>Max Date:</td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td><input className="date-input" id="timeMin" type="date" onInput={minDateChangeHandler} value={dateRange.timeMin} /></td>
-                        <td className="column-spacing"></td>
-                        <td><input className="date-input" id="timeMax" type="date" onInput={maxDateChangeHandler} value={dateRange.timeMax} /></td>
-                        <td className="column-spacing"></td>
-                        <td><button type="submit" onClick={submitHandler} className="button-submit">Submit</button></td>
-                    </tr>
-                </table>
-            </form>
-            {dateError ? 
+        <div style={{height: "100%"}}>
+            <div className="main-container">
+                <form>
+                    <table className="date-picker">
+                        <tr>
+                            <td>Min Date: </td>
+                            <td className="column-spacing"></td>
+                            <td>Max Date:</td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td><input className="date-input" id="timeMin" type="date" onInput={minDateChangeHandler} value={dateRange.timeMin} /></td>
+                            <td className="column-spacing"></td>
+                            <td><input className="date-input" id="timeMax" type="date" onInput={maxDateChangeHandler} value={dateRange.timeMax} /></td>
+                            <td className="column-spacing"></td>
+                            <td><button type="submit" onClick={submitHandler} className="button-submit">Submit</button></td>
+                        </tr>
+                    </table>
+                </form>
+                {dateError ?
+                    <div>
+                        {dateError}
+                    </div>
+                    : <div></div>}
+                <hr />
                 <div>
-                    {dateError}
+                    <TimeRangeSetting returnedDateRange={returnedDateRange} />
+                    <Logs logs={logArr} />
                 </div>
-                : <div></div>}
-            <hr />
-            <div>
-                <TimeRangeSetting returnedDateRange={returnedDateRange} />
-                <Logs logs={logArr} />
+
             </div>
         </div>
 

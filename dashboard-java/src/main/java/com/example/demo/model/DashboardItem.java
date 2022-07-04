@@ -1,24 +1,12 @@
 package com.example.demo.model;
 
-import java.util.UUID;
-
-import org.springframework.data.cassandra.core.mapping.Column;
-import org.springframework.data.cassandra.core.mapping.PrimaryKey;
-import org.springframework.data.cassandra.core.mapping.Table;
-
-@Table
 public class DashboardItem {
 
-	@PrimaryKey
-	@Column("id")
-	private UUID id;
-	@Column("query_message")
+	private String id;
 	private String queryMessage;
-	@Column("time")
 	private String time;
-	@Column("display_message")
 	private String displayMessage;
-	public DashboardItem(UUID id, String queryMessage, String time, String displayMessage) {
+	public DashboardItem(String id, String queryMessage, String time, String displayMessage) {
 		super();
 		this.id = id;
 		this.queryMessage = queryMessage;
@@ -32,7 +20,7 @@ public class DashboardItem {
 		return queryMessage;
 	}
 	
-	public UUID getId() {
+	public String getId() {
 		return id;
 	}
 	public void setQueryMessage(String queryMessage) {
@@ -48,7 +36,7 @@ public class DashboardItem {
 		return displayMessage;
 	}
 	
-	public void setId(UUID id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 	public void setDisplayMessage(String displayMessage) {

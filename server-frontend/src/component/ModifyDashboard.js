@@ -4,12 +4,7 @@ import '../styling/modifyDashboard.css';
 import DashboardItems from "./DashboardItems";
 
 function ModifyDashboard() {
-    const [visibility, setVisibility] = useState(true);
-    // const [details, setDetails] = useState({
-    //     queryMessage: "",
-    //     time: "",
-    //     displayMessage: ""
-    // })
+    const [visibility, setVisibility] = useState(false);
     const [queryMessage, setQueryMessage] = useState("");
     const [time, setTime] = useState('');
     const [displayMessage, setDisplayMessage] = useState("");
@@ -31,13 +26,6 @@ function ModifyDashboard() {
 
     const clearFormEntry = () => {
         console.log("clearformentry called");
-        // setDetails(() => {
-        //     return {
-        //         queryMessage: "",
-        //         time: "",
-        //         displayMessage: ""
-        //     }
-        // })
         setQueryMessage("");
         setTime("");
         setDisplayMessage("");
@@ -55,14 +43,6 @@ function ModifyDashboard() {
         clearFormEntry();
     }
 
-    // const inputChangeHandler = (event) => {
-    //     setDetails((prevState) => {
-    //         return{
-    //             ...prevState,
-    //             [event.target.name]: event.target.value
-    //         }
-    //     })
-    // }
     const timeChangeHandler = (event) => {
         setTime(event.target.value);
     }
@@ -109,8 +89,8 @@ function ModifyDashboard() {
                 </form>
             </div>
             <div className="main-container">
-                <h3>List of created components</h3>
-                <DashboardItems list={list} />
+                <h3>List of created dashboard items</h3>
+                <DashboardItems list={list} getAllItemsHandler={getAllItems} />
             </div>
         </div>
     )
