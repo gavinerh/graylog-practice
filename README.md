@@ -1,7 +1,8 @@
 # Logging Server
 
 ## Overall architecture diagram
-![FHT internship architecture](https://user-images.githubusercontent.com/75064420/177126500-411c23c5-f745-4bd0-921d-0c17fccdfca9.jpg)
+![FHT internship architecture](https://user-images.githubusercontent.com/75064420/177517807-2be04a4d-e3a8-4f5c-a286-b14b63f957e2.jpg)
+
 
 
 ## Project Description
