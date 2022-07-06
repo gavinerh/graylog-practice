@@ -8,8 +8,26 @@ services:
       - 10000:10000
   frontend:
     image: gavinerh/react-test
-  java-server:
-    image: gavinerh/backend-java-7
+  java-classification-server:
+    image: gavinerh/java-classification-server
+    environment:
+      - TIMERANGE.FILE=/appData/timeRangeData
+      - COMBINED.LOGFILE=/appData/combined/logs-all
+      - BASE.URL=http://python-server:5000/reclassifyLogs
+      - KAFKA.URL=kafka:9092
+    volumes:
+      - java-classification-data:/appData/
+    links:
+      - python-server
+  java-dashboard-server:
+    image: gavinerh/dashboard-server
+    environment:
+#      - BASE.URL=http://nginx:10000/search/dashboard
+      - KAFKA.URL=kafka:9092
+    depends_on:
+      - kafka
+    ports:
+      - 8082:8082
   mongodb:
     image: mongo:4.2
     volumes:
@@ -80,12 +98,42 @@ services:
       - 12201:12201
       # GELF UDP
       - 12201:12201/udp
+
   python-server:
-    image: gavinerh/flask-test-server-5
+    image: python-classification-server
     ports:
       - 5000:5000
     volumes:
       - myapp:/appData/
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.1.2
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - 22181:2181
+    restart: always
+    volumes:
+      - zookeeper-data:/var/lib/zookeeper/data
+      - zookeeper-log:/var/lib/zookeeper/log
+
+  kafka:
+    image: confluentinc/cp-kafka:7.1.2
+    depends_on:
+      - zookeeper
+    ports:
+      - 29092:29092
+    restart: always
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    volumes:
+      - kafka-data:/var/lib/kafka/data
 # Volumes for persisting data, see https://docs.docker.com/engine/admin/volumes/volumes/
 volumes:
   mongo-data:
@@ -112,3 +160,27 @@ volumes:
       type: 'none'
       o: 'bind'
       device: './data/python-data'
+  java-classification-data:
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: './data/python-data/logfiles'
+  zookeeper-data:
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: './data/zookeeper-data'
+  kafka-data:
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: './data/kafka-data'
+  zookeeper-log:
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: './data/zookeeper-log'

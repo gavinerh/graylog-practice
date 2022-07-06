@@ -30,7 +30,6 @@ public class ElasticsearchAPIImpl implements ElasticsearchAPI {
 	public boolean createDoc(String indexName, String docID, DashboardItem item) {
 		HttpEntity<DashboardItem> entity = create(item);
 		String baseURL = env.getProperty("base.url");
-		baseURL = "http://localhost:10000/search/dashboard";
 		baseURL += String.format("/_doc/%s", docID);
 		String response = restTemplate.exchange(baseURL, HttpMethod.POST, entity, String.class).getBody();
 		System.out.println(response);
@@ -46,7 +45,6 @@ public class ElasticsearchAPIImpl implements ElasticsearchAPI {
 	public boolean modifyItem(String indexName, String docID, DashboardItem item) {
 		HttpEntity<DashboardItem> entity = create(item);
 		String baseURL = env.getProperty("base.url");
-		baseURL = "http://localhost:10000/search/dashboard";
 		baseURL += String.format("/_doc/%s", docID);
 		restTemplate.exchange(baseURL, HttpMethod.PUT, entity, String.class).getBody();
 		return true;
@@ -56,7 +54,6 @@ public class ElasticsearchAPIImpl implements ElasticsearchAPI {
 	public boolean deleteDoc(String indexName, String docID) {
 		HttpEntity<DashboardItem> entity = get();
 		String baseURL = env.getProperty("base.url");
-		baseURL = "http://localhost:10000/search/dashboard";
 		baseURL += String.format("/_doc/%s", docID);
 		String response = restTemplate.exchange(baseURL, HttpMethod.DELETE, entity, String.class).getBody();
 		return true;
@@ -80,7 +77,6 @@ public class ElasticsearchAPIImpl implements ElasticsearchAPI {
 	public List<ResponseObject> getItems(String indexName) {
 		HttpEntity<DashboardItem> entity = get();
 		String baseURL = env.getProperty("base.url");
-		baseURL = "http://localhost:10000/search/dashboard";
 		baseURL += "/_search";
 		ElasticsearchResponse response = restTemplate.exchange(baseURL, HttpMethod.GET, entity, ElasticsearchResponse.class).getBody();
 		return response.getHits().getHits();

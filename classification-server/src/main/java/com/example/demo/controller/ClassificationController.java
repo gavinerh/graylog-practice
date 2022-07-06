@@ -6,7 +6,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
+import org.apache.kafka.clients.producer.KafkaProducer;
+import org.apache.kafka.clients.producer.ProducerConfig;
+import org.apache.kafka.clients.producer.ProducerRecord;
+import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpEntity;
@@ -16,6 +21,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestClientException;
@@ -96,6 +103,31 @@ public class ClassificationController {
 		classificationLogs = manageFiles.readFromFile(env.getProperty("combined.logfile"));
 		ResponseLogClassification logsClassification = new ResponseLogClassification(classificationLogs, timeRange.get(0), timeRange.get(1));
 		return new ResponseEntity<ResponseLogClassification>(logsClassification, HttpStatus.OK);
+	}
+	
+	@PostMapping("/producer")
+	public ResponseEntity<Void> producerPublish(){
+		
+		Properties properties = new Properties();
+		properties.setProperty(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, env.getProperty("kafka.url"));
+		properties.setProperty(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
+		properties.setProperty(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
+		
+		// create producer
+		KafkaProducer<String, String> producer = new KafkaProducer<>(properties);
+		
+		for(String s : classificationLogs) {
+			// create producer record
+			ProducerRecord<String, String> producerRecord = new ProducerRecord<String, String>("classification", s);
+			
+			// send the data
+			producer.send(producerRecord);
+		}
+		
+		// flush and close the producer
+		producer.flush();
+		
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
 }
