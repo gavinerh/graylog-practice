@@ -8,11 +8,9 @@ import java.util.concurrent.ExecutionException;
 
 import org.apache.kafka.clients.admin.AdminClient;
 import org.apache.kafka.clients.admin.AdminClientConfig;
+import org.apache.kafka.clients.admin.DeleteTopicsResult;
 import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.clients.admin.TopicListing;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -27,6 +25,17 @@ public class KafkaClient {
 		}
 		admin.createTopics(Collections.singleton(newTopic));
 		return true;
+	}
+	
+	public boolean deleteTopic(String topicName, String kafkaUrl) {
+		if (admin == null) {
+			createAdmin(kafkaUrl);
+		}
+		DeleteTopicsResult result = admin.deleteTopics(Collections.singleton(topicName));
+		if (result.all() != null){
+			return true;
+		}
+		return false;
 	}
 	
 	public List<String> getTopicList(String kafkaUrl){
