@@ -134,6 +134,20 @@ services:
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
     volumes:
       - kafka-data:/var/lib/kafka/data
+  udp-kafka-connector:
+    image: 'gavinerh/udp-kafka-connector'
+    environment:
+      - KAFKA.URL=kafka:9092
+      - PORT.FILEPATH=/appData/ports
+    depends_on:
+      - kafka
+    ports:
+      - 8083:8083
+      - 1515:1515/udp
+      - 1516:1516/udp
+      - 1517:1517/udp
+    volumes:
+      - udp-connector-data:/appData
 # Volumes for persisting data, see https://docs.docker.com/engine/admin/volumes/volumes/
 volumes:
   mongo-data:
@@ -184,3 +198,9 @@ volumes:
       type: 'none'
       o: 'bind'
       device: './data/zookeeper-log'
+  udp-connector-data:
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: './data/port-data'

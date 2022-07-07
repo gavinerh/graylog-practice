@@ -17,6 +17,7 @@ services:
       - zookeeper
     ports:
       - 29092:29092
+    restart: always
     environment:
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
@@ -34,6 +35,19 @@ services:
       - kafka
     ports:
       - 8082:8082
+  udp-kafka-connector:
+    image: 'gavinerh/udp-kafka-connector'
+    environment:
+      - KAFKA.URL=kafka:9092
+      - PORT.FILEPATH=/appData/ports.txt
+    depends_on:
+      - kafka
+    ports:
+      - 8083:8083
+      - 1515:1515/udp
+    volumes:
+      - udp-connector-data:/appData
+
     
 
 volumes:
@@ -55,3 +69,9 @@ volumes:
       type: 'none'
       o: 'bind'
       device: 'C:\Users\gavin\OneDrive\Desktop\graylog\zookeeper-log'
+  udp-connector-data:
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: 'C:\Users\gavin\OneDrive\Desktop\graylog\port-data'

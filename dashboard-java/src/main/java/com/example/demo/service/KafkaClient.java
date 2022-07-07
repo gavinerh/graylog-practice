@@ -32,6 +32,7 @@ public class KafkaClient {
 			createAdmin(kafkaUrl);
 		}
 		DeleteTopicsResult result = admin.deleteTopics(Collections.singleton(topicName));
+		System.out.println(result.toString());
 		if (result.all() != null){
 			return true;
 		}
