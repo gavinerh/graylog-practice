@@ -1,11 +1,15 @@
 import '../styling/dashboardComponent.css';
 
-function DashboardComponent(props){
+function DashboardComponent(props) {
 
     const componentList = props.componentList;
-    return(
+    return (
         <div className='component-container'>
-            
+            {componentList.map(component => {
+                <div>
+                    {component}
+                </div>
+            })}
         </div>
     )
 }

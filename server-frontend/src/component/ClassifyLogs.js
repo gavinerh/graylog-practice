@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import ClassifyLogsService from "../service/ClassifyLogsService"
 import '../styling/main.css';
 import TimeRangeSetting from "./TimeRangeSetting";
-import Logs from "./Logs";
+import GeneralList from "./GeneralList";
 
 function ClassifyLogs() {
     const [logArr, setLogArr] = useState([]);
@@ -107,7 +107,7 @@ function ClassifyLogs() {
                 <hr />
                 <div>
                     <TimeRangeSetting returnedDateRange={returnedDateRange} />
-                    <Logs logs={logArr} />
+                    <GeneralList itemList={logArr} />
                 </div>
 
             </div>

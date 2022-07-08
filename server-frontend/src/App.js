@@ -6,6 +6,8 @@ import ClassifyLogs from './component/ClassifyLogs';
 import Dashboard from './component/Dashboard';
 import SideNav from './component/SideNav';
 import ModifyDashboard from './component/ModifyDashboard';
+import ModifyKafkaTopics from './component/ModifyKafkaTopics';
+import ModifyUdpStreaming from './component/ModifyUdpStreaming';
 
 function App() {
   return (
@@ -17,6 +19,8 @@ function App() {
           <Route exact path="/" component={Dashboard} />
           <Route path="/modifyDashboard" component={ModifyDashboard} />
           <Route path="/classification" component={ClassifyLogs} />
+          <Route path="/modifyKafkaTopics" component={ModifyKafkaTopics} />
+          <Route path="/modifyUdpStreaming" component={ModifyUdpStreaming} />
         </Switch>
       </BrowserRouter>
     </React.Fragment>

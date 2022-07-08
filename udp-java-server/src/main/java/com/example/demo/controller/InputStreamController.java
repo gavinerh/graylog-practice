@@ -9,8 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -21,6 +23,7 @@ import com.example.demo.services.FileManagementImpl;
 import com.example.demo.services.UdpReceiver;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/udpStream")
 public class InputStreamController {
 	
@@ -31,6 +34,7 @@ public class InputStreamController {
 	
 	@PostMapping("/")
 	public ResponseEntity<ResponseModel> startInput(@RequestParam("port") Integer port, @RequestParam("address") String address) {
+		System.out.println("Code got here");
 		if(map.containsKey(port)) {
 			return new ResponseEntity<ResponseModel>(new ResponseModel("Port number is already created"), HttpStatus.BAD_REQUEST);
 		}

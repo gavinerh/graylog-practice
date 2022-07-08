@@ -35,18 +35,18 @@ services:
       - kafka
     ports:
       - 8082:8082
-  udp-kafka-connector:
-    image: 'gavinerh/udp-kafka-connector'
-    environment:
-      - KAFKA.URL=kafka:9092
-      - PORT.FILEPATH=/appData/ports.txt
-    depends_on:
-      - kafka
-    ports:
-      - 8083:8083
-      - 1515:1515/udp
-    volumes:
-      - udp-connector-data:/appData
+  # udp-kafka-connector:
+  #   image: 'gavinerh/udp-kafka-connector'
+  #   environment:
+  #     - KAFKA.URL=kafka:9092
+  #     - PORT.FILEPATH=/appData/ports.txt
+  #   depends_on:
+  #     - kafka
+  #   ports:
+  #     - 8083:8083
+  #     - 1515:1515/udp
+  #   volumes:
+  #     - udp-connector-data:/appData
 
     
 

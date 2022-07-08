@@ -1,4 +1,4 @@
-function Log(props){
+function GeneralListItem(props){
     return(
         <div className="log-message">
             <p>{props.message}</p>
@@ -6,4 +6,4 @@ function Log(props){
     )
 }
 
-export default Log;
+export default GeneralListItem;
