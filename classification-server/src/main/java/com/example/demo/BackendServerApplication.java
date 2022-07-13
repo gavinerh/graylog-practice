@@ -29,6 +29,7 @@ public class BackendServerApplication {
 		List<Endpoint> list = new ArrayList<>();
 		list.add(new Endpoint("/reclassify", "get"));
 		list.add(new Endpoint("/getLogs", "get"));
+		list.add(new Endpoint("/generateClassificationResult", "get"));
 		EndpointRequest request = new EndpointRequest();
 		request.setServiceName("Java Classification server");
 		request.setEndpoints(list);

@@ -129,5 +129,25 @@ public class ClassificationController {
 		
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
+	
+	@GetMapping("/generateClassificationResult")
+	public ResponseEntity<Void> generateClassificationResult(@RequestParam("timeMin") String timeMin,
+			@RequestParam("timeMax") String timeMax){
+		try {
+			triggerReclassification(timeMin, timeMax);
+			getResultList();
+			producerPublish();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (URISyntaxException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return new ResponseEntity<Void>(HttpStatus.OK);
+	}
 
 }

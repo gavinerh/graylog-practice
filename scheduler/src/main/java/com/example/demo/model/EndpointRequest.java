@@ -26,8 +26,4 @@ public class EndpointRequest {
 	public void setEndpoints(List<Endpoint> endpoints) {
 		this.endpoints = endpoints;
 	}
-
-
-	
-	
 }
