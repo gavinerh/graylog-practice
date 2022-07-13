@@ -67,8 +67,8 @@ public class InputStreamController {
 		return new ResponseEntity<ResponseModel>(new ResponseModel("Stream stopped at port " + port), HttpStatus.OK);
 	}
 	
-	@GetMapping("/checkAlive")
-	public void checkReceiverAlive(@RequestParam("port") int port) {
+	@GetMapping("/{port}")
+	public void checkReceiverAlive(@PathVariable("port") int port) {
 		if(!map.containsKey(port)) {
 			System.out.println("Receiver not created at all");
 			return;

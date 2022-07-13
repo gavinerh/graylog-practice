@@ -15,7 +15,7 @@ function DashboardItems(props){
     }
     return(
         <div>
-            {list.map(item => <DashboardItem key={item.id} item={item} itemDeleteHandler={deleteItemHandler} />)}
+            {list.map(item => <DashboardItem item={item} itemDeleteHandler={deleteItemHandler} />)}
         </div>
     )
 }

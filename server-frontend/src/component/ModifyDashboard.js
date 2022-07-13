@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import DashboardService from "../service/DashboardService";
+import Endpoints from "../service/Endpoints";
 import '../styling/modifyDashboard.css';
 import DashboardItems from "./DashboardItems";
 
@@ -9,16 +10,15 @@ function ModifyDashboard() {
     const [time, setTime] = useState('');
     const [displayMessage, setDisplayMessage] = useState("");
 
+    const [list, setList] = useState([])
+
     const getAllItems = () => {
-        DashboardService.getAllItems()
+        Endpoints.getEndpoints()
         .then(response => {
-            console.log(response.data);
             setList(response.data)
         })
         .catch(error => console.log(error));
     }
-
-    const [list, setList] = useState([])
 
     useEffect(()=>{
         getAllItems();
@@ -89,7 +89,7 @@ function ModifyDashboard() {
                 </form>
             </div>
             <div className="main-container">
-                <h3>List of created dashboard items</h3>
+                <h3>List of endpoints</h3>
                 <DashboardItems list={list} getAllItemsHandler={getAllItems} />
             </div>
         </div>

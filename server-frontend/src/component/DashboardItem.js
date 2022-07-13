@@ -1,35 +1,16 @@
-function DashboardItem(props){
+function DashboardItem(props) {
+    console.log(props.item.name)
 
-    
-    const deleteHandler = () => {
-        props.itemDeleteHandler(props.item._id);
-    }
-
-    return(
+    return (
         <div className="item">
-            <table style={{textAlign: "left"}}>
+            <table style={{ textAlign: "left" }}>
                 <tr>
-                    <td>Id:</td>
-                    <td>{props.item._id}</td>
+                    <td>Endpoint:</td>
+                    <td>{props.item.name}</td>
                 </tr>
                 <tr>
-                    <td>Query:</td>
-                    <td>{props.item._source.queryMessage}</td>
-                </tr>
-                <tr>
-                    <td>Time</td>
-                    <td>{props.item._source.time}</td>
-                </tr>
-                <tr>
-                    <td>Display message:</td>
-                    <td>{props.item._source.displayMessage}</td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td>
-                        <button  style={{width: "50%"}}>Modify</button>
-                        <button onClick={deleteHandler} style={{width: "50%"}}>Delete</button>
-                    </td>
+                    <td>Method:</td>
+                    <td>{props.item.method}</td>
                 </tr>
             </table>
         </div>
