@@ -1,7 +1,7 @@
 import axios from "axios";
 
 class UdpService {
-    url = "http://localhost:10000/udpConnector/udpStream"
+    url = "/udpConnector/udpStream"
     getPorts() {
         return axios.get(`${this.url}/`);
     }

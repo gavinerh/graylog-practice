@@ -1,7 +1,7 @@
 import axios from "axios";
 
 class EndpointService{
-    url = "http://localhost:10000/dashboard/endpoint"
+    url = "/dashboard/endpoint"
     getEndpoints(){
         return axios.get(`${this.url}/`);
     }

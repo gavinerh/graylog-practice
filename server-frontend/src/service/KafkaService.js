@@ -1,7 +1,7 @@
 import axios from "axios";
 
 class KafkaService{
-    url = "http://localhost:10000/dashboard/kafka"
+    url = "/dashboard/kafka"
     getTopics(){
         return axios.get(`${this.url}/`)
     }
