@@ -1,4 +1,4 @@
-function DashboardItem(props) {
+function EndpointItem(props) {
     console.log(props.item.name)
 
     return (
@@ -17,4 +17,4 @@ function DashboardItem(props) {
     )
 }
 
-export default DashboardItem;
+export default EndpointItem;
