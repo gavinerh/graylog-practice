@@ -51,23 +51,41 @@ see image: ![image](https://user-images.githubusercontent.com/75064420/174514501
 10. Set up input stream:
     * Create new input stream under System -> Inputs
     * Select new input stream type see image: ![image](https://user-images.githubusercontent.com/75064420/174514947-53904f1b-942f-4f6a-8351-7e3250534e02.png)
-    * Use the default settings but change the input port number: ![image](https://user-images.githubusercontent.com/75064420/174515211-9c0c3a8f-e30e-49c6-b8bb-55d9365bf92d.png)
-11. Set up alerts under the alerts tab
+    * ![image](https://user-images.githubusercontent.com/75064420/178925282-7afbe4a4-d4e4-414b-9873-c7de95cda9f3.png)
+    * Choose the syslog kafka option as the messages will enter graylog through kafka streams
+    * ![image](https://user-images.githubusercontent.com/75064420/178925821-e0d4a259-aacf-4396-b6c7-aff51716db00.png)
+    * all the options will be the same, except the title (user defined)
+    * change the text under Bootstrap servers and zookeeper address to the ones defined in the image above
+    * Also change the Topic filter regex to text shown in image
+    * leave the Legacy mode unchecked
+    * use similar instructions to create another syslog kafka stream but for this new kafka stream, the Topic filter regex option will be '^classification$'
+11. Set the UDP stream ports and creating new kafka topics
+    * Visit the react project running at localhost:10000
+    * ![image](https://user-images.githubusercontent.com/75064420/178927138-4866d78b-0b70-4ccc-be7a-c812b6a4c9d6.png)
+    * at the left sidebar, click on the last option tab 'modify Udp streaming' 
+    * click on add new Udp stream port, and enter port number 1515 and submit
+    ![image](https://user-images.githubusercontent.com/75064420/178927782-f3107d76-876b-43a9-98e8-0c81abbe7dc0.png)
+    * Do the same for port 1516 and 1517 and the final page will look similar to image below
+    * ![image](https://user-images.githubusercontent.com/75064420/178928340-8107b588-f22a-44db-ba8f-9cd423fa68fd.png)
+    * Continue to create new kafka topic by clicking on the 3 option of the left sidebar 'list of kafka topics'
+    * ![image](https://user-images.githubusercontent.com/75064420/178928845-def5c591-a5ac-400a-8f6b-e1b7812b09a8.png)
+    * Click on add new topic to create another topic named classification
+    * in total, there should be 2 topics created, pfsense and classification
+12. Set up alerts under the alerts tab
     * Create new notifications:
         * Select from the list of notifications dropdown and enter the appropriate information
     * Create new event definition
         * Select the Filter and Aggregation tab
-        * Enter the search query that graylog should trigger an event when such a message is detected
+        * Enter the search query that graylog should trigger an event when such a message is detected, an example: 'message: "failed password"'
+        * ![image](https://user-images.githubusercontent.com/75064420/178931651-69a4e757-fea8-41cd-b63d-ed87658a101e.png)
+
         * At the notifications tab, add new notification that was created in the previous step and click done
         * Click the summary tab and click done
-12. Use ssh port forwarding again, but now using the nginx port number to view the custom frontend
+13. Use ssh port forwarding again, but now using the nginx port number to view the custom frontend
 web console at port 10000
-    * The custom web-console will portray information or allow custom actions such as:
-        * view the list of brute force attacks
-        * view the current file classifications 
+
 # How to stop the project
 1. Go to the root directory and type `sudo docker-compose down`
-2. `cd udpBroadcaster` to enter udpBroadcaster folder, type `./stopBroadcast` to stop udp broadcasting service
 
 # How to use the project
 
@@ -79,20 +97,33 @@ web console at port 10000
     * Store log messages
 4. Mongodb
     * Store graylog user specific server
+    * Store configuration information
 5. Python flask server
     * Receive http notification from graylog alerts of brute force attack
     * Classify logs depending on set time range
-    * Capture event_definition_description values from HTTP notification of graylog and query elasticsearch for the past 15 minutes for new brute force entries, followed by populating the brute force logs file
-6. Java backend server
+    * Primarily used to query elasticsearch database
+6. Java classification server
     * provide rest endpoints to
         * list all classifications within a set time range, http calls to python flask server
-        * list of all brute force attacks with timestamp
+        * Return logs classifications based on the duration of search for jmpadm and guacamole servers
         * trigger logs classifications (http calls to python server)
-7. React web console
-    * Another web-interface on top of the graylog server to provide most information to user
-    * Frontend interface for java backend server
-8. Nginx reverse proxy
-    * For routing react http calls to java backend server
+7. Kafka message broker server
+    * Provide asynchronous message broker service between the microservices
+8. Zookeeper server
+    * Hold information of the kafka broker, works in tandem with kafka
+9. Udp configuration server
+    * runs on java
+    * receives udp messages and produce messages to kafka broker
+10. Nginx reverse proxy
+    * For routing react http calls to backend services
+    * Act as a reverse proxy for the react server and other backend services
+11. Scheduler
+    * For scheduling log classification cron jobs
+12. React web console
+    * Another web-interface on top of the graylog server to provide all endpoint information to user
+    * Allow user to view log classification according to duration of search
+    * Create new kafka topics and view existing kafka topics
+    * Create or delete udp ports
 
 # Using ssh port forwarding
 
