@@ -1,6 +1,7 @@
 import UdpItem from "./UdpItem";
 
 function UdpList(props) {
+    console.log(props.itemList);
     return (
         <div>
             <h2>{props.listTitle}</h2>

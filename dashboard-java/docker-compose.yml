@@ -27,14 +27,14 @@ services:
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
     volumes:
       - kafka-data:/var/lib/kafka/data
-  myapp:
-    image: 'gavinerh/dashboard-server'
-    environment:
-      - KAFKA.URL=kafka:9092
-    depends_on:
-      - kafka
-    ports:
-      - 8082:8082
+  # myapp:
+  #   image: 'gavinerh/dashboard-server'
+  #   environment:
+  #     - KAFKA.URL=kafka:9092
+  #   depends_on:
+  #     - kafka
+  #   ports:
+  #     - 8082:8082
   # udp-kafka-connector:
   #   image: 'gavinerh/udp-kafka-connector'
   #   environment:

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import UdpService from "../service/UdpService";
 import GeneralList from "./GeneralList";
-import OneValueInputForm from "./OneValueInputForm";
+import UdpCreationForm from "./UdpCreationForm";
 import UdpList from "./UdpList";
 
 function ModifyUdpStreaming(){
@@ -11,9 +11,15 @@ function ModifyUdpStreaming(){
     const [visibility, setVisibility] = useState(false);
     const [portNum, setPortNum] = useState("");
     const [portArr, setPortArr] = useState([]);
+    const [kafkaTopic, setKafkaTopic] = useState("");
+    const [errorMessage, setErrorMessage] = useState("");
 
     const changeHandler = (event) => {
         setPortNum(event.target.value);
+    }
+
+    const topicChangeHandler = (event) => {
+        setKafkaTopic(event.target.value);
     }
 
     const getPorts = () => {
@@ -25,14 +31,25 @@ function ModifyUdpStreaming(){
 
     const formSubmitHandler = (event) =>{
         event.preventDefault();
-        UdpService.createPort(portNum)
+        if(portNum === "" || kafkaTopic === ""){
+            setErrorMessage("Both fields must be filled");
+            return;
+        }
+        if (portNum <= 0){
+            setErrorMessage("Port number cannot be negative")
+            return;
+        }
+        UdpService.createPort(portNum, kafkaTopic)
         .then(response => {
             getPorts();
-            setPortNum("")
+            setPortNum("");
+            setKafkaTopic("");
+            setErrorMessage("");
             setVisibility(!visibility)
         })
         .catch(error => {
             console.log(error);
+            setErrorMessage("Port number is already taken");
         })
     }
 
@@ -46,19 +63,22 @@ function ModifyUdpStreaming(){
     const deleteHandler = (port) =>{
         UdpService.deletePort(port)
         .then(response => {
-            getPorts()
+            getPorts();
         })
     }
     return(
         <div>
             <div className="main-container">
                 {visibility ? 
-                <OneValueInputForm formTitle={formTitle} 
+                <UdpCreationForm formTitle={formTitle} 
                                 inputName={inputName} 
                                 inputValue={portNum} 
+                                inputTopic={kafkaTopic}
+                                inputTopicHandler={topicChangeHandler}
                                 inputChangeHandler={changeHandler}
                                 submitHandler={formSubmitHandler} 
-                                visibility={visibilityHandler}/>
+                                visibility={visibilityHandler}
+                                errorMessage={errorMessage}/>
                                 : 
                                 <div className="new-item-control" style={{ margin: "0px auto" }}>
                                 <button className="new-item" onClick={visibilityHandler}>Add new Udp Stream port</button>

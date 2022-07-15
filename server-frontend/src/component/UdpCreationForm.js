@@ -1,4 +1,4 @@
-function OneValueInputForm(props) {
+function UdpCreationForm(props) {
     return (
         <div>
             <form onSubmit={props.submitHandler}>
@@ -8,7 +8,14 @@ function OneValueInputForm(props) {
                     </div>
                     <div className="new-item-control">
                         <label>{props.inputName}</label>
-                        <input type="text" value={props.inputValue} name="queryMessage" onChange={props.inputChangeHandler} />
+                        <input type="number" value={props.inputValue} name="queryMessage" onChange={props.inputChangeHandler} />
+                    </div>
+                    <div className="new-item-control">
+                        <label>Enter Kafka Topic:</label>
+                        <input type="text" value={props.inputTopic} name="queryMessage" onChange={props.inputTopicHandler} />
+                    </div>
+                    <div className="new-item-control">
+                        <h4 style={{padding: "0px", margin: "0px", color: "red"}}>{props.errorMessage}</h4>
                     </div>
                     <div className="new-item-control">
                         <button type="submit">Submit</button>
@@ -20,4 +27,4 @@ function OneValueInputForm(props) {
     )
 }
 
-export default OneValueInputForm;
+export default UdpCreationForm;

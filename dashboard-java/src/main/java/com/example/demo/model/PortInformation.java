@@ -1,19 +1,19 @@
 package com.example.demo.model;
 
-public class DashboardItem {
+public class PortInformation {
 
 	private String id;
 	private String queryMessage;
 	private String time;
 	private String displayMessage;
-	public DashboardItem(String id, String queryMessage, String time, String displayMessage) {
+	public PortInformation(String id, String queryMessage, String time, String displayMessage) {
 		super();
 		this.id = id;
 		this.queryMessage = queryMessage;
 		this.time = time;
 		this.displayMessage = displayMessage;
 	}
-	public DashboardItem() {
+	public PortInformation() {
 		super();
 	}
 	public String getQueryMessage() {

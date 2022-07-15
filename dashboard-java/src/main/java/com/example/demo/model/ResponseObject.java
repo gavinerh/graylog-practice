@@ -2,8 +2,8 @@ package com.example.demo.model;
 
 public class ResponseObject {
 	private String _id;
-	private DashboardItem _source;
-	public ResponseObject(String _id, DashboardItem _source) {
+	private PortInformation _source;
+	public ResponseObject(String _id, PortInformation _source) {
 		super();
 		this._id = _id;
 		this._source = _source;
@@ -17,10 +17,10 @@ public class ResponseObject {
 	public void set_id(String _id) {
 		this._id = _id;
 	}
-	public DashboardItem get_source() {
+	public PortInformation get_source() {
 		return _source;
 	}
-	public void set_source(DashboardItem _source) {
+	public void set_source(PortInformation _source) {
 		this._source = _source;
 	}
 	

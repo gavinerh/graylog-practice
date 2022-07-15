@@ -13,7 +13,7 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import com.example.demo.model.DashboardItem;
+import com.example.demo.model.PortInformation;
 import com.example.demo.model.ElasticsearchResponse;
 import com.example.demo.model.ResponseObject;
 
@@ -27,8 +27,8 @@ public class ElasticsearchAPIImpl implements ElasticsearchAPI {
 	RestTemplate restTemplate;
 
 	@Override
-	public boolean createDoc(String indexName, String docID, DashboardItem item) {
-		HttpEntity<DashboardItem> entity = create(item);
+	public boolean createDoc(String indexName, String docID, PortInformation item) {
+		HttpEntity<PortInformation> entity = create(item);
 		String baseURL = env.getProperty("base.url");
 		baseURL += String.format("/_doc/%s", docID);
 		String response = restTemplate.exchange(baseURL, HttpMethod.POST, entity, String.class).getBody();
@@ -42,8 +42,8 @@ public class ElasticsearchAPIImpl implements ElasticsearchAPI {
 	}
 
 	@Override
-	public boolean modifyItem(String indexName, String docID, DashboardItem item) {
-		HttpEntity<DashboardItem> entity = create(item);
+	public boolean modifyItem(String indexName, String docID, PortInformation item) {
+		HttpEntity<PortInformation> entity = create(item);
 		String baseURL = env.getProperty("base.url");
 		baseURL += String.format("/_doc/%s", docID);
 		restTemplate.exchange(baseURL, HttpMethod.PUT, entity, String.class).getBody();
@@ -52,30 +52,30 @@ public class ElasticsearchAPIImpl implements ElasticsearchAPI {
 
 	@Override
 	public boolean deleteDoc(String indexName, String docID) {
-		HttpEntity<DashboardItem> entity = get();
+		HttpEntity<PortInformation> entity = get();
 		String baseURL = env.getProperty("base.url");
 		baseURL += String.format("/_doc/%s", docID);
 		String response = restTemplate.exchange(baseURL, HttpMethod.DELETE, entity, String.class).getBody();
 		return true;
 	}
 	
-	private HttpEntity<DashboardItem> create(DashboardItem item) {
+	private HttpEntity<PortInformation> create(PortInformation item) {
 		HttpHeaders headers = new HttpHeaders();
 		headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-		HttpEntity<DashboardItem> entity = new HttpEntity<DashboardItem>(item, headers);
+		HttpEntity<PortInformation> entity = new HttpEntity<PortInformation>(item, headers);
 		return entity;
 	}
 	
 	// can be used for get and delete requests
-	private HttpEntity<DashboardItem> get(){
+	private HttpEntity<PortInformation> get(){
 		HttpHeaders headers = new HttpHeaders();
 		headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-		return new HttpEntity<DashboardItem>(headers);
+		return new HttpEntity<PortInformation>(headers);
 	}
 
 	@Override
 	public List<ResponseObject> getItems(String indexName) {
-		HttpEntity<DashboardItem> entity = get();
+		HttpEntity<PortInformation> entity = get();
 		String baseURL = env.getProperty("base.url");
 		baseURL += "/_search";
 		ElasticsearchResponse response = restTemplate.exchange(baseURL, HttpMethod.GET, entity, ElasticsearchResponse.class).getBody();

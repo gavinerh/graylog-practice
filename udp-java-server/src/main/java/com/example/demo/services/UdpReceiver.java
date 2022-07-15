@@ -18,23 +18,39 @@ import org.springframework.core.env.Environment;
 public class UdpReceiver extends Thread {
 	private DatagramSocket socket;
 	private byte[] buffer = new byte[262144];
-	private int port;
+	private String port;
 	private DatagramPacket packet;
 	private String kafkaUrl;
+	private String topicName;
 
 	
-	public UdpReceiver(int port, String address, String kafkaUrl) {
+	public UdpReceiver(String port, String address, String kafkaUrl, String topicName) {
+		this.topicName = topicName;
 		this.kafkaUrl = kafkaUrl;
 		try {
 			this.port = port;
 			socket = new DatagramSocket(null);
-			InetSocketAddress add = new InetSocketAddress(port);
+			InetSocketAddress add = new InetSocketAddress(Integer.valueOf(port));
 			socket.bind(add);
 		} catch (SocketException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} 
 	}
+	
+	
+
+	public String getTopicName() {
+		return topicName;
+	}
+
+
+
+	public void setTopicName(String topicName) {
+		this.topicName = topicName;
+	}
+
+
 
 	@Override
 	public void run() {
@@ -50,7 +66,7 @@ public class UdpReceiver extends Thread {
 				dataStr = new String(packet.getData(), 0, packet.getLength());
 				System.out.println(dataStr);
 				// send data to producer here
-				producerRecord = new ProducerRecord<String, String>("pfsense", dataStr);
+				producerRecord = new ProducerRecord<String, String>(topicName, dataStr);
 				// send the data
 				producer.send(producerRecord);
 			} catch (IOException e) {

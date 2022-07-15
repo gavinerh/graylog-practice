@@ -7,8 +7,8 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
@@ -55,11 +55,14 @@ public class FileManagementImpl {
 		return true;
 	}
 
-	public static boolean writeToFile(String path, List<String> content) {
+	public static boolean writeToFile(String path, Map<String, UdpReceiver> content) {
+		System.out.println("Inside write to file");
 		try {
 			FileWriter writer = new FileWriter(path);
-			for(String s : content) {
-				writer.write(s);
+			for(String s : content.keySet()) {
+				writer.write(s); // writes the port number
+				writer.write(" ");
+				writer.write(content.get(s).getTopicName()); // writes the topic name
 				writer.write("\n");
 			}
 			writer.close();
@@ -71,6 +74,7 @@ public class FileManagementImpl {
 	}
 
 	public static boolean createNewFile(String path) {
+		System.out.println("Inside create new file");
 		File f = new File(path);
 		try {
 			if(f.createNewFile()) {
