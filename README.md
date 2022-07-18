@@ -1,8 +1,7 @@
 # Logging Server
 
 ## Overall architecture diagram
-![FHT internship architecture](https://user-images.githubusercontent.com/75064420/177517807-2be04a4d-e3a8-4f5c-a286-b14b63f957e2.jpg)
-
+![FHT internship architecture](https://user-images.githubusercontent.com/75064420/179473020-171f515c-9bd2-4314-b39d-ccf793e176e5.jpg)
 
 
 ## Project Description
@@ -18,7 +17,11 @@ is preferably running linux.
 service tag for appropriate email configuration and GRAYLOG_ROOT_PASSWORD in SHA hash format
     * Host machine storage location for bind mounts under the `volumes` tag
     * `ports` information under the `graylog` service tag for the appropriate udp socket number to be exposed
-2. Create the containers by building the containers for the services:
+2. Download maven and npm
+3. Modify the bash file
+    * `sudo chmod +x createFolderStructure.sh`
+    * `sudo chmod +x buildDockerImages.sh`
+3. Create the containers by building the containers for the services:
     * Build python server
         * `cd flask-server`
         * `sudo docker build -t gavinerh/flask-test-server-6 .`
@@ -88,11 +91,13 @@ web console at port 10000
 1. Go to the root directory and type `sudo docker-compose down`
 
 # How to use the project
+1. Use the react project running at localhost:10000 to configure the services for graylog server
+2. Use the graylog server running at localhost:9000 to configure input streams, events and notifications
 
 # List of services running
 1. Graylog server
     * HTTP and email alerts and notification of brute force attacks
-    * UDP stream input listener
+    * Kafka stream input listener
 2. Elasticsearch
     * Store log messages
 4. Mongodb
@@ -104,9 +109,15 @@ web console at port 10000
     * Primarily used to query elasticsearch database
 6. Java classification server
     * provide rest endpoints to
-        * list all classifications within a set time range, http calls to python flask server
-        * Return logs classifications based on the duration of search for jmpadm and guacamole servers
-        * trigger logs classifications (http calls to python server)
+        * Create classifications within a set time range, trigger http calls to python flask server
+            * Endpoint: /javaClassify/reclassify
+            * Method: GET
+        * Get List of logs classifications based on the duration of search for jmpadm and guacamole servers
+            * Endpoint: /javaClassify/getLogs
+            * Method: GET
+        * trigger combined logs classifications (http calls to python server)
+            * Endpoint: /javaClassify/generateClassificationResult
+            * Method: GET
 7. Kafka message broker server
     * Provide asynchronous message broker service between the microservices
 8. Zookeeper server
@@ -114,16 +125,34 @@ web console at port 10000
 9. Udp configuration server
     * runs on java
     * receives udp messages and produce messages to kafka broker
+    * Create and Route udp port to kafka
+        * Endpoint: /udpConnector/udpStream/
+        * Method: POST
+    * Get all opened udp ports
+        * Endpoint: /udpConnector/udpStream/
+        * Method: GET
+    * Delete udp port
+        * Endpoint: /udpConnector/udpStream/
+        * Method: DELETE
 10. Nginx reverse proxy
-    * For routing react http calls to backend services
+    * For routing react http calls to most backend services
     * Act as a reverse proxy for the react server and other backend services
+    * Hosting at port 10000
 11. Scheduler
-    * For scheduling log classification cron jobs
-12. React web console
+    * For scheduling log classification cron jobs for classification results
+    * Schedule delete jobs on elasticsearch, to prevent problems of storage reaching limit
+    * Get List of scheduled cron jobs:
+        * Endpoint: /scheduler/schedule/
+        * Method: GET
+12. Kafka-Configuration-server
+    * Add new Topics in kafka
+        * Endpoint: /dashboard/kafka/
+        * Method: POST
+    * Get List of topics created in kafka
+        * Endpoint: /dashboard/kafka/ 
+        * Method: GET
+13. React web console
     * Another web-interface on top of the graylog server to provide all endpoint information to user
     * Allow user to view log classification according to duration of search
     * Create new kafka topics and view existing kafka topics
     * Create or delete udp ports
-
-# Using ssh port forwarding
-
