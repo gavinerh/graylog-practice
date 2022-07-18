@@ -12,6 +12,10 @@ function CreateKafkaTopicForm(props) {
     }
     const submitHandler = (event) => {
         event.preventDefault();
+        if(name === ""){
+            setErrorMessage("Field must be filled");
+            return;
+        }
         KafkaService.isTopicCreated(name)
             .then(response => {
                 console.log("successfully created topic");

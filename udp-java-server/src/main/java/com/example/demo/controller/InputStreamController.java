@@ -50,12 +50,13 @@ public class InputStreamController {
 	
 	@DeleteMapping("/")
 	public ResponseEntity<ResponseModel> stopInput(@RequestParam("port") int port){
-		if(!map.containsKey(port)) {
+		if(!map.containsKey(String.valueOf(port))) {
+			System.out.println("Inside bad response");
 			return new ResponseEntity<ResponseModel>(new ResponseModel("Port number is not yet created"), HttpStatus.BAD_REQUEST);
 		}
-		UdpReceiver receiver = (UdpReceiver) map.get(port);
+		UdpReceiver receiver = (UdpReceiver) map.get(String.valueOf(port));
 		receiver.interrupt();
-		map.remove(port);
+		map.remove(String.valueOf(port));
 		FileManagementImpl.writeToFile(env.getProperty("port.filepath"), map);
 		return new ResponseEntity<ResponseModel>(new ResponseModel("Stream stopped at port " + port), HttpStatus.OK);
 	}

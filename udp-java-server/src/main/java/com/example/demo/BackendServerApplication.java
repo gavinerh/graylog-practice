@@ -27,7 +27,7 @@ public class BackendServerApplication {
 		ApplicationContext context = SpringApplication.run(BackendServerApplication.class, args);
 		// get ports for udp stream
 		setupUdpStream(context);
-//		setupEndpoints(context);
+		setupEndpoints(context);
 	}
 	
 	private static void setupEndpoints(ApplicationContext context) {
