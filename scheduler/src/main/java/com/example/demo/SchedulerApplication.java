@@ -12,7 +12,6 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
-import org.springframework.scheduling.support.CronTrigger;
 import org.springframework.web.client.RestTemplate;
 
 import com.example.demo.controller.SchedulerController;
@@ -27,14 +26,29 @@ public class SchedulerApplication {
 		ApplicationContext context = SpringApplication.run(SchedulerApplication.class, args);
 		EndpointRequest request = setupEndpoint();
 		sendEndpointInfo(context.getEnvironment(), request);
-		setupScheduler(context);
+		setupClassificationScheduler(context);
+		setupDeleteElasticDataScheduler(context);
 		System.out.println("Basic set up finished");
 	}
 	
-	private static void setupScheduler(ApplicationContext context) {
+	private static void setupClassificationScheduler(ApplicationContext context) {
 		SchedulerController scheduler = (SchedulerController) context.getBean("schedulerController");
 		String cronStr = "0 1 0 * * *";
 		scheduler.createSchedule(new CronModel(cronStr));
+	}
+	
+	private static void setupDeleteElasticDataScheduler(ApplicationContext context) {
+		SchedulerController scheduler = (SchedulerController) context.getBean("schedulerController");
+		String schedule1 = "0 0 0 8 * *";
+		String schedule2 = "0 0 0 15 * *";
+		String schedule3 = "0 0 0 22 * *";
+		String schedule4 = "0 0 0 28 * *";
+		String schedule5 = "0 0 0 1 * *";
+		scheduler.createDeleteSchedule(new CronModel(schedule1));
+		scheduler.createSchedule(new CronModel(schedule2));
+		scheduler.createSchedule(new CronModel(schedule3));
+		scheduler.createSchedule(new CronModel(schedule4));
+		scheduler.createSchedule(new CronModel(schedule5));
 	}
 	
 	
@@ -62,11 +76,12 @@ public class SchedulerApplication {
 	public ThreadPoolTaskScheduler threadPoolTaskScheduler(){
 	  ThreadPoolTaskScheduler threadPoolTaskScheduler
 	    = new ThreadPoolTaskScheduler();
-	  threadPoolTaskScheduler.setPoolSize(5);
+	  threadPoolTaskScheduler.setPoolSize(7);
 	  threadPoolTaskScheduler.setThreadNamePrefix(
 	    "ThreadPoolTaskScheduler");
 	  return threadPoolTaskScheduler;
 	}
+	
 
 }
 

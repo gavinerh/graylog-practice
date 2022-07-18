@@ -1,5 +1,8 @@
 package com.example.demo.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
@@ -14,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.model.CronModel;
 import com.example.demo.services.ClassificationReportTask;
+import com.example.demo.services.DeleteElasticTask;
 
 @RestController
 @CrossOrigin
@@ -26,10 +30,17 @@ public class SchedulerController {
 	@Autowired
 	Environment env;
 
-	private CronModel cron = null;
+	private List<CronModel> cronModelList = new ArrayList<>();
 
+	public ResponseEntity<Void> createDeleteSchedule(@RequestBody CronModel request){
+		cronModelList.add(request);
+		CronTrigger cronTrigger = new CronTrigger(request.getExpression());
+		scheduler.schedule(new DeleteElasticTask(env), cronTrigger);
+		return new ResponseEntity<Void>(HttpStatus.OK);
+	}
+	
 	public ResponseEntity<Void> createSchedule(@RequestBody CronModel request){
-		this.cron = request;
+		cronModelList.add(request);
 		CronTrigger cronTrigger = new CronTrigger(request.getExpression());
 		scheduler.schedule(new ClassificationReportTask(env), cronTrigger);
 		return new ResponseEntity<Void>(HttpStatus.OK);
@@ -37,11 +48,11 @@ public class SchedulerController {
 	
 	
 	@GetMapping("/")
-	public ResponseEntity<CronModel> getSchedule(){
-		if(cron == null) {
-			return new ResponseEntity<CronModel>(cron, HttpStatus.NOT_FOUND);
+	public ResponseEntity<List<CronModel>> getSchedule(){
+		if(cronModelList == null) {
+			return new ResponseEntity<List<CronModel>>(cronModelList, HttpStatus.NOT_FOUND);
 		}
-		return new ResponseEntity<CronModel>(cron, HttpStatus.OK);
+		return new ResponseEntity<List<CronModel>>(cronModelList, HttpStatus.OK);
 	}
 
 }
