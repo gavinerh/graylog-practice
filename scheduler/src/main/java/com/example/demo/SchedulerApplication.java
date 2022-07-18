@@ -39,11 +39,11 @@ public class SchedulerApplication {
 	
 	private static void setupDeleteElasticDataScheduler(ApplicationContext context) {
 		SchedulerController scheduler = (SchedulerController) context.getBean("schedulerController");
-		String schedule1 = "0 0 0 8 * *";
-		String schedule2 = "0 0 0 15 * *";
-		String schedule3 = "0 0 0 22 * *";
-		String schedule4 = "0 0 0 28 * *";
-		String schedule5 = "0 0 0 1 * *";
+		String schedule1 = "0 0 16 7 * *";
+		String schedule2 = "0 0 16 14 * *";
+		String schedule3 = "0 0 16 21 * *";
+		String schedule4 = "0 0 16 27 * *";
+		String schedule5 = "0 0 16 1 * *";
 		scheduler.createDeleteSchedule(new CronModel(schedule1));
 		scheduler.createSchedule(new CronModel(schedule2));
 		scheduler.createSchedule(new CronModel(schedule3));
