@@ -92,13 +92,13 @@ web console at port 10000
 6. Java classification server
     * provide rest endpoints to
         * Create classifications within a set time range, trigger http calls to python flask server
-            * Endpoint: /javaClassify/reclassify
+            * Endpoint: java-classification-server:8081/reclassify
             * Method: GET
         * Get List of logs classifications based on the duration of search for jmpadm and guacamole servers
-            * Endpoint: /javaClassify/getLogs
+            * Endpoint: java-classification-server:8081/getLogs
             * Method: GET
         * trigger combined logs classifications (http calls to python server)
-            * Endpoint: /javaClassify/generateClassificationResult
+            * Endpoint: java-classification-server:8081/generateClassificationResult
             * Method: GET
 7. Kafka message broker server
     * Provide asynchronous message broker service between the microservices
@@ -108,13 +108,13 @@ web console at port 10000
     * runs on java
     * receives udp messages and produce messages to kafka broker
     * Create and Route udp port to kafka
-        * Endpoint: /udpConnector/udpStream/
+        * Endpoint: udp-configuration-server:8083/udpStream/
         * Method: POST
     * Get all opened udp ports
-        * Endpoint: /udpConnector/udpStream/
+        * Endpoint: udp-configuration-server:8083/udpStream/
         * Method: GET
     * Delete udp port
-        * Endpoint: /udpConnector/udpStream/
+        * Endpoint: udp-configuration-server:8083/udpStream/
         * Method: DELETE
 10. Nginx reverse proxy
     * For routing react http calls to most backend services
@@ -124,14 +124,14 @@ web console at port 10000
     * For scheduling log classification cron jobs for classification results
     * Schedule delete jobs on elasticsearch, to prevent problems of storage reaching limit
     * Get List of scheduled cron jobs:
-        * Endpoint: /scheduler/schedule/
+        * Endpoint: java-scheduler:8084/schedule/
         * Method: GET
 12. Kafka-Configuration-server
     * Add new Topics in kafka
-        * Endpoint: /dashboard/kafka/
+        * Endpoint: java-dashboard-server:8082/kafka/
         * Method: POST
     * Get List of topics created in kafka
-        * Endpoint: /dashboard/kafka/ 
+        * Endpoint: java-dashboard-server:8082/kafka/ 
         * Method: GET
 13. React web console
     * Another web-interface on top of the graylog server to provide all endpoint information to user
