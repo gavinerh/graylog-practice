@@ -17,39 +17,22 @@ is preferably running linux.
 service tag for appropriate email configuration and GRAYLOG_ROOT_PASSWORD in SHA hash format
     * Host machine storage location for bind mounts under the `volumes` tag
     * `ports` information under the `graylog` service tag for the appropriate udp socket number to be exposed
-2. Download maven and npm
+2. Download maven (optional)
 3. Modify the bash file
     * `sudo chmod +x createFolderStructure.sh`
-    * `sudo chmod +x buildDockerImages.sh`
-3. Create the containers by building the containers for the services:
-    * Build python server
-        * `cd flask-server`
-        * `sudo docker build -t gavinerh/flask-test-server-6 .`
-    * Pull the java-classification-server from remote docker hub
-        * `sudo docker pull gavinerh/java-classification-server`
-    * (Optional) Build java classification server from source code directly:
-        * First: Install maven
-        * Second: Check maven is installed
-        * Continue to build the container
-            * From the root of the project: `cd classification-server`
-            * `sudo mvn clean install -DskipTests`
-            * `sudo docker build -t gavinerh/java-classification-server .`
-    * Build the react frontend server:
-        * First: Install npm and node
-        * Second: Check npm and node version
-        * Continue to build the container:
-            * From the root of the project: `cd server-frontend`
-            * `sudo npm install`
-            * `sudo docker build -t gavinerh/react-test .`
-3. At the root of the project directory, run `sudo docker-compose up`
-4. `cd udpBroadcaster` to enter the directory udpBroadcaster
-5. Type `./startBroadcast` to start the udp broadcast service. 
-information regarding the broadcast information is located in the ports.conf configuration file.
+    * `sudo chmod +x buildDockerImagesWithoutMaven.sh`
+    * `sudo chmod +x buildDockerImagesWithMaven.sh`
+4. Create the containers by building the containers for the services by choosing ONE of the below choices:
+    * Build docker images without maven installed in host machine
+        * `./buildDockerImagesWithoutMaven.sh`
+    * Build docker images with maven already installed in host machine
+        * `./buildDockerImagesWithMaven.sh`
+5. After the build process is done, at the root of the project directory, run `sudo docker-compose up -d`
 6. Check if the containers are running, type `sudo docker ps` to confirm
-7. Once the containers are running, use ssh port forwarding to access web interface of graylog at port 9000: 
+7. Once the containers are running, use ssh port forwarding to access web interface of graylog at port 9000 or port 10000 for the react web interface
 8. Visit the graylog service from local browser, and login with `admin` as user and with the
 same password as the one used in the docker-compose.yml file
-9. After login, start the udp input stream at the same port number as specified in the docker-compose.yml file
+9. After login, start by creating a new input stream by choosing the `syslog kafka` option
 see image: ![image](https://user-images.githubusercontent.com/75064420/174514501-6f905e32-6f00-4ac6-ab0b-e60cf9b09c92.png)
 10. Set up input stream:
     * Create new input stream under System -> Inputs
@@ -59,21 +42,20 @@ see image: ![image](https://user-images.githubusercontent.com/75064420/174514501
     * ![image](https://user-images.githubusercontent.com/75064420/178925821-e0d4a259-aacf-4396-b6c7-aff51716db00.png)
     * all the options will be the same, except the title (user defined)
     * change the text under Bootstrap servers and zookeeper address to the ones defined in the image above
-    * Also change the Topic filter regex to text shown in image
+    * Also change the Topic filter regex to text shown in image, choose any kafka topic name you desire
     * leave the Legacy mode unchecked
-    * use similar instructions to create another syslog kafka stream but for this new kafka stream, the Topic filter regex option will be '^classification$'
+    * use similar instructions to create another syslog kafka stream but for this new kafka stream, the Topic filter regex option will be '^classification$' or any name you desire
 11. Set the UDP stream ports and creating new kafka topics
     * Visit the react project running at localhost:10000
     * ![image](https://user-images.githubusercontent.com/75064420/178927138-4866d78b-0b70-4ccc-be7a-c812b6a4c9d6.png)
     * at the left sidebar, click on the last option tab 'modify Udp streaming' 
-    * click on add new Udp stream port, and enter port number 1515 and submit
-    ![image](https://user-images.githubusercontent.com/75064420/178927782-f3107d76-876b-43a9-98e8-0c81abbe7dc0.png)
-    * Do the same for port 1516 and 1517 and the final page will look similar to image below
-    * ![image](https://user-images.githubusercontent.com/75064420/178928340-8107b588-f22a-44db-ba8f-9cd423fa68fd.png)
-    * Continue to create new kafka topic by clicking on the 3 option of the left sidebar 'list of kafka topics'
+    * click on add new Udp stream port, and enter port number 1515 and any kafka topic name you want and submit (note that the kafka topic name should be same as the one you choose when setting up the graylog kafka input)
+    ![image](https://user-images.githubusercontent.com/75064420/179896418-61a09875-1684-460f-b72a-546881a66d7b.png)
+
+    * Do the same for port 1516 and 1517 and the final page will look similar to image above
+    * Continue to create new kafka topic by clicking on the third option of the left sidebar 'list of kafka topics'
     * ![image](https://user-images.githubusercontent.com/75064420/178928845-def5c591-a5ac-400a-8f6b-e1b7812b09a8.png)
-    * Click on add new topic to create another topic named classification
-    * in total, there should be 2 topics created, pfsense and classification
+    * Click on add new topics depending on the name you defined previously when setting the graylog inputs
 12. Set up alerts under the alerts tab
     * Create new notifications:
         * Select from the list of notifications dropdown and enter the appropriate information
