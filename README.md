@@ -18,6 +18,7 @@ service tag for appropriate email configuration and GRAYLOG_ROOT_PASSWORD in SHA
     * Host machine storage location for bind mounts under the `volumes` tag
     * `ports` information under the `graylog` service tag for the appropriate udp socket number to be exposed
 2. Download maven (optional)
+    * Remember to add maven command to the list of sudoers
 3. Modify the bash file
     * `sudo chmod +x createFolderStructure.sh`
     * `sudo chmod +x buildDockerImagesWithoutMaven.sh`
